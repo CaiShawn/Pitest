@@ -1,6 +1,5 @@
 package com.caishawn.alicerec.ui.detail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.caishawn.alicerec.data.repository.MovieRepository
@@ -16,11 +15,9 @@ data class DetailUiState(
 )
 
 class DetailViewModel(
-    savedStateHandle: SavedStateHandle,
+    private val movieId: Int,
     private val repository: MovieRepository
 ) : ViewModel() {
-
-    private val movieId: Int = savedStateHandle["movieId"] ?: -1
 
     private val _uiState = MutableStateFlow(DetailUiState())
     val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()

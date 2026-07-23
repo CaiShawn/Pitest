@@ -1,8 +1,13 @@
 package com.caishawn.alicerec.ui.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -26,11 +31,15 @@ object Routes {
 }
 
 @Composable
-fun NavGraph(navController: NavHostController) {
-    NavHost(
-        navController = navController,
-        startDestination = Routes.COLLECTION
-    ) {
+fun NavGraph(
+    navController: NavHostController,
+    paddingValues: PaddingValues = PaddingValues(0.dp)
+) {
+    Box(modifier = Modifier.padding(paddingValues)) {
+        NavHost(
+            navController = navController,
+            startDestination = Routes.COLLECTION
+        ) {
         composable(Routes.COLLECTION) {
             val vm: CollectionViewModel = koinViewModel()
             val uiState by vm.uiState.collectAsState()
@@ -81,6 +90,7 @@ fun NavGraph(navController: NavHostController) {
                     navController.popBackStack()
                 }
             )
+        }
         }
     }
 }

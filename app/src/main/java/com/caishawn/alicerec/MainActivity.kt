@@ -3,6 +3,7 @@ package com.caishawn.alicerec
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CollectionsBookmark
@@ -13,8 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.caishawn.alicerec.ui.navigation.NavGraph
@@ -72,6 +71,9 @@ fun MainScreen() {
             }
         }
     ) { innerPadding ->
-        NavGraph(navController = navController)
+        NavGraph(
+            navController = navController,
+            paddingValues = innerPadding
+        )
     }
 }
