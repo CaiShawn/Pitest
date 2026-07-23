@@ -1,5 +1,6 @@
 package com.caishawn.alicerec.data.repository
 
+import app.cash.turbine.test
 import com.caishawn.alicerec.data.local.MovieDao
 import com.caishawn.alicerec.data.local.MovieEntity
 import com.caishawn.alicerec.data.remote.TmdbApi
@@ -10,6 +11,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -89,5 +91,43 @@ class MovieRepositoryTest {
         // Assert: DAO's updateStatus is called exactly once with the new args,
         // not upsertMovie (which would rewrite all fields).
         coVerify(exactly = 1) { movieDao.updateStatus(27205, "watched") }
+    }
+
+    @Test
+    fun `getMoviesByStatus queries DAO with given status and maps entities to domain`() = runTest {
+        // Arrange: DAO Flow emits one movie matching "want_to_see"
+        val daoFlow = flowOf(
+            listOf(
+                MovieEntity(
+                    id = 27205,
+                    title = "Inception",
+                    overview = "Dream thief",
+                    posterPath = "/abc.jpg",
+                    backdropPath = null,
+                    releaseDate = "2010-07-15",
+                    voteAverage = 8.4,
+                    status = "want_to_see",
+                    addedAt = 1000L
+                )
+            )
+        )
+        coEvery { movieDao.getMoviesByStatus("want_to_see") } returns daoFlow
+
+        // Act + Assert
+        repository.getMoviesByStatus("want_to_see").test {
+            val movies = awaitItem()
+
+            // Contract 1: DAO was queried with the right status
+            coVerify(exactly = 1) { movieDao.getMoviesByStatus("want_to_see") }
+
+            // Contract 2: returned movies are mapped to domain layer with status preserved
+            assertEquals(1, movies.size)
+            assertEquals(27205, movies[0].id)
+            assertEquals("Inception", movies[0].title)
+            assertEquals("want_to_see", movies[0].status)
+            assertEquals(8.4, movies[0].voteAverage)
+
+            awaitComplete()
+        }
     }
 }
