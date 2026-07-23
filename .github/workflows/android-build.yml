@@ -1,4 +1,4 @@
-name: Android Build
+name: Android Build & Test
 
 on:
   push:
@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build Debug APK
+  test-and-build:
+    name: Unit tests + Debug APK
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -29,21 +29,35 @@ jobs:
           api-level: 35
           build-tools-version: '35.0.0'
 
+      # AGP 8.9.x requires Gradle 8.11.1+ — bumb from 8.9 to 8.13
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 8.9
+          gradle-version: 8.13
 
       - name: Create local.properties with placeholder API key
         run: |
           echo "TMDB_API_KEY=${TMDB_API_KEY:-ci_placeholder_key}" >> local.properties
 
+      - name: Run unit tests
+        run: gradle :app:testDebugUnitTest --no-daemon --stacktrace
+
       - name: Build debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: |
+            app/build/reports/tests/testDebugUnitTest/**
+            app/build/test-results/testDebugUnitTest/**
+          retention-days: 7
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
         if: success()
+        uses: actions/upload-artifact@v4
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
