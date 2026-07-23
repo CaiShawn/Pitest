@@ -28,16 +28,21 @@ fun SearchScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         // Search bar
         SearchBar(
-            query = uiState.query,
-            onQueryChange = onQueryChanged,
-            onSearch = {},
-            active = false,
-            onActiveChange = {},
-            placeholder = { Text("搜索电影...") },
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = uiState.query,
+                    onQueryChange = onQueryChanged,
+                    onSearch = {},
+                    expanded = false,
+                    onExpandedChange = {},
+                    placeholder = { Text("搜索电影...") }
+                )
+            },
+            expanded = false,
+            onExpandedChange = {},
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            leadingIcon = { /* TMDb logo or search icon handled by SearchBar */ }
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {}
 
         when {
