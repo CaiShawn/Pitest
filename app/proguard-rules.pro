@@ -1,0 +1,1 @@
+# AliceRec ProGuard rules
