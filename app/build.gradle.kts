@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -19,7 +21,7 @@ android {
         // Inject TMDB API key from local.properties into BuildConfig
         val tmdbApiKey: String = project.findProperty("TMDB_API_KEY") as String?
             ?: run {
-                val props = java.util.Properties()
+                val props = Properties()
                 val localFile = rootProject.file("local.properties")
                 if (localFile.exists()) {
                     props.load(localFile.inputStream())
