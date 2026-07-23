@@ -2,6 +2,7 @@ package com.caishawn.alicerec
 
 import android.app.Application
 import com.caishawn.alicerec.di.appModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class AliceRecApp : Application() {
