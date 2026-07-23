@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -83,7 +83,7 @@ fun CollectionScreen(
                 movie = movie,
                 onClick = { onMovieClick(movie) },
                 primaryAction = { onMarkWantToSee(movie) },
-                primaryIcon = Icons.Default.Visibility,
+                primaryIcon = Icons.Default.Refresh,
                 primaryLabel = "想看",
                 secondaryAction = { onDelete(movie) },
                 secondaryIcon = Icons.Default.Delete,

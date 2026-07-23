@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CollectionsBookmark
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -44,7 +44,7 @@ fun MainScreen() {
     val currentDestination = navBackStackEntry?.destination
 
     val bottomNavItems = listOf(
-        BottomNavItem(Routes.COLLECTION, "收藏", Icons.Default.CollectionsBookmark),
+        BottomNavItem(Routes.COLLECTION, "收藏", Icons.Default.Favorite),
         BottomNavItem(Routes.SEARCH, "搜索", Icons.Default.Search)
     )
 
