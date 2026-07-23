@@ -13,8 +13,8 @@ import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class MovieRepositoryTest {
 
@@ -49,7 +49,7 @@ class MovieRepositoryTest {
         assertEquals(27205, result[0].id)
         assertEquals("Inception", result[0].title)
         assertEquals("/abc.jpg", result[0].posterPath)
-        assertEquals(8.4, result[0].voteAverage)
+        assertEquals(8.4, result[0].voteAverage, 0.0001)
         assertEquals("https://image.tmdb.org/t/p/w500/abc.jpg", result[0].posterUrl)
     }
 
@@ -82,8 +82,8 @@ class MovieRepositoryTest {
 
     @Test
     fun `updateStatus delegates id and new status to DAO`() = runTest {
-        // Arrange: user marks Inception as watched
-        // (no need to seed anything — updateStatus is pure delegation)
+        // Arrange: stub the DAO so the call returns successfully
+        coEvery { movieDao.updateStatus(any(), any()) } returns Unit
 
         // Act
         repository.updateStatus(id = 27205, status = "watched")
@@ -125,7 +125,7 @@ class MovieRepositoryTest {
             assertEquals(27205, movies[0].id)
             assertEquals("Inception", movies[0].title)
             assertEquals("want_to_see", movies[0].status)
-            assertEquals(8.4, movies[0].voteAverage)
+            assertEquals(8.4, movies[0].voteAverage, 0.0001)
 
             awaitComplete()
         }
