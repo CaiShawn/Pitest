@@ -77,4 +77,17 @@ class MovieRepositoryTest {
         assertEquals("Inception", stored.title)
         assertEquals("want_to_see", stored.status)
     }
+
+    @Test
+    fun `updateStatus delegates id and new status to DAO`() = runTest {
+        // Arrange: user marks Inception as watched
+        // (no need to seed anything — updateStatus is pure delegation)
+
+        // Act
+        repository.updateStatus(id = 27205, status = "watched")
+
+        // Assert: DAO's updateStatus is called exactly once with the new args,
+        // not upsertMovie (which would rewrite all fields).
+        coVerify(exactly = 1) { movieDao.updateStatus(27205, "watched") }
+    }
 }
